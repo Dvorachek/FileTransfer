@@ -7,6 +7,7 @@ import sys
 class server(object):
     _BUFF_SIZE = 4096
     _password = 'water'
+    _t = -1
 
     def __init__(self):
         self.s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -47,9 +48,10 @@ class server(object):
                 self.__incoming_file(c)
             elif msg == 'r':
                 self.__outgoing_file(c)
+            self._t = -1
             c.close()
             count -= 1
-            print ''.format(time.time() - st)
+            print '\n{:.2f}s\nDisconnect'.format(time.time() - st)
 
     def __authentication(self, c):
         c.send("Welcome to Dylan's file share server.\nPassword authentication required..")
@@ -68,23 +70,13 @@ class server(object):
         print 'Receiving file...\n'
         c.send('\nWhich file do you want to send?')
         file_name = c.recv(self._BUFF_SIZE)
-        
         file_size = c.recv(self._BUFF_SIZE)
         f = open(file_name, 'wb')  # add some sort of file type check for sketchy things
         l = c.recv(self._BUFF_SIZE)
-        
         print 'the file is: {}\nthe size is: {}'.format(file_name, file_size)
-        t = -1
         transfered = sys.getsizeof(l) - 33
         while(l):
-            progress = '#'
-            remaining = '-'
-            percentage = float("{:0.2f}".format(transfered/float(file_size)*100))
-            if t != percentage:
-                print '\r[{}{}] %{}'.format(progress*int(percentage), remaining*(100-int(percentage)), percentage),
-                t = percentage
-            else:
-                pass
+            self.__progress_bar(transfered, file_size)
             f.write(l)
             l = c.recv(self._BUFF_SIZE)
             transfered += sys.getsizeof(l) - 33
@@ -105,22 +97,22 @@ class server(object):
         print 'the file is: {}\nthe size is: {}'.format(file_name, file_size)
         l = f.read(self._BUFF_SIZE)
         transfered = sys.getsizeof(l) - 33
-        t = -1
         while(l):
-            progress = '#'
-            remaining = '-'
-            percentage = float("{:0.2f}".format(transfered/float(file_size)*100))
-            if t != percentage:
-                print '\r[{}{}] %{}'.format(progress*int(percentage), remaining*(100-int(percentage)), percentage),
-                t = percentage
-            else:
-                pass
+            self.__progress_bar(transfered, file_size)
             transfered += sys.getsizeof(l) - 33
             c.send(l)
             l = f.read(self._BUFF_SIZE)
         f.close()
-        print "Sending file..."
 
+    def __progress_bar(self, transfered, file_size):
+        progress = '#'
+        remaining = '-'
+        percentage = float("{:0.2f}".format(transfered/float(file_size)*100))
+        if self._t != percentage:
+            print '\r[{}{}] %{}'.format(progress*int(percentage), remaining*(100-int(percentage)), percentage),
+            self._t = percentage
+        else:
+            pass
 
 def main():
     serv = server()

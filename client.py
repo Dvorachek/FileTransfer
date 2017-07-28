@@ -95,7 +95,7 @@ elif msg == 's':
         l = f.read(BUFF_SIZE)
         transfered += sys.getsizeof(l) - 33
     f.close()
-print 'BYE BYE'
+print '\nBYE BYE'
 s.shutdown(socket.SHUT_WR)
 s.close()
 
