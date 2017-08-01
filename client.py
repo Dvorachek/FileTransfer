@@ -2,6 +2,32 @@ import socket
 import sys
 import os
 
+image = '''   ___       __         _        ___       ___    _____ __      ____    
+  / _ \__ __/ ___ ____ ( )___   / _ \___  / _ \  / __(_/ ___   / _____ ___ __ __ ___ ___
+ / // / // / / _ `/ _ \|/(_-<  / // / _ \/ // / / _// / / -_) _\ \/ -_/ __| |/ / -_/ __/
+/____/\_, /_/\_,_/_//_/ /___/ /____/_//_/____/ /_/ /_/_/\__/ /___/\__/_/  |___/\__/_/ 
+     /___/  '''
+
+intro = '''                          .".
+                         /  |
+                        /  /
+                       / ,"
+           .-------.--- /
+          "._ __.-/ o. o\  
+             "   (    Y  )
+                  )     /
+                 /     (
+                /       Y
+            .-"         |
+           /  _     \    \ 
+          /    `. ". ) /' )
+         Y       )( / /(,/
+        ,|      /     )
+       ( |     /     /
+        " \_  (__   (__ 
+            "-._,)--._,)'''
+
+
 # put print statements in a file
 class client(object):
     _BUFF_SIZE = 4096
@@ -12,7 +38,7 @@ class client(object):
         self.host = host
         self.port = port
         self._password = password
-        self.files = [file for file in os.listdir(os.getcwd()) if file[-3:]!='.py']
+        self.files = [file for file in os.listdir(os.getcwd()) if file[-3:]!='.py' and os.path.isfile(file) and file[-4:]!='.bat']
 
     def connect(self):
         self.s.connect((self.host, self.port))
@@ -48,6 +74,7 @@ class client(object):
         self.s.send(raw_input())
         file_name = self.s.recv(self._BUFF_SIZE)
         file_size = self.s.recv(self._BUFF_SIZE)
+        self.s.send('handshake')
         if file_name == 'invalid':
             print 'Invalid choice or incorrect spelling'
             quit()
@@ -75,6 +102,7 @@ class client(object):
                 self.s.send(file_name)
                 file_size = str(int(os.path.getsize(file_name)))
                 self.s.send(file_size)
+                self.s.recv(self._BUFF_SIZE)
                 break
         print '\nfile: {}\nsize: {}'.format(file_name, self.__file_size(file_size))
         f = open(file_name, 'rb')
@@ -107,9 +135,21 @@ class client(object):
             return "{}B".format(file_size)
 
 
+def __find_host():
+    location = ''
+    print "{}\n{}\n".format(image, intro)
+    while True:
+        location = raw_input('\nConnecting from Pear Street? (y/n)\n')
+        if location == 'y':  # computer ip
+            return "192.168.0.47"
+        elif location == 'n':  # public ip
+            return "24.68.115.7"
+        else:
+            print 'try again'
+
+
 def main():
-    # host = "192.168.0.47"
-    host = socket.gethostname()
+    host = __find_host()
     port = 8888
     pw = 'water'
 

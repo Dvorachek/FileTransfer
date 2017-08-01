@@ -42,7 +42,7 @@ class server(object):
         print '\n{} disconnected'.format(addr)
 
     def __authentication(self, c):
-        c.send("Welcome to Dylan's file server.\nAuthentication required..")
+        c.send("\nAuthentication required..")
         auth = c.recv(self._BUFF_SIZE)
         if auth != self._password:
             c.send('Incorrect password, terminating connection.')
@@ -57,6 +57,8 @@ class server(object):
         c.send('\nWhich file do you want to send?\n')
         file_name = c.recv(self._BUFF_SIZE)
         file_size = c.recv(self._BUFF_SIZE)
+        c.send('handshake')
+        
         print '\nfile: {}\nsize: {}'.format(file_name, self.__file_size(file_size))
         f = open(file_name, 'wb')  # add some sort of file type check for sketchy things
         l = c.recv(self._BUFF_SIZE)
@@ -70,8 +72,8 @@ class server(object):
         f.close()
 
     def __outgoing_file(self, c):
-        files = [file for file in os.listdir(os.getcwd()) if file[-3:]!='.py']
-        c.send('\nWhich file do you want?\n{}'.format('\n'.join(files)))
+        files = [file for file in os.listdir(os.getcwd()) if file[-3:]!='.py' and os.path.isfile(file) and file[-4:]!='.bat']
+        c.send('\nWhich file do you want?\n{}\n'.format('\n'.join(files)))
         file_name = c.recv(self._BUFF_SIZE)
         if file_name not in files:
             c.send('invalid')
@@ -79,6 +81,7 @@ class server(object):
         file_size = str(int(os.path.getsize(file_name)))
         c.send(file_name)
         c.send(file_size)
+        c.recv(self._BUFF_SIZE)
         print '\nfile: {}\nsize: {}'.format(file_name, self.__file_size(file_size))
         f = open(file_name, 'rb')
         l = f.read(self._BUFF_SIZE)
@@ -113,8 +116,9 @@ class server(object):
 
 
 def main():
-    # host = "192.168.0.47"
-    host = socket.gethostname()
+    host = "192.168.0.47"
+    # host = "172.16.7.14"
+    # host = socket.gethostname()
     port = 8888
     pw = 'water'
 
