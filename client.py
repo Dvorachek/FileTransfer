@@ -2,31 +2,6 @@ import socket
 import sys
 import os
 
-image = '''   ___       __         _        ___       ___    _____ __      ____    
-  / _ \__ __/ ___ ____ ( )___   / _ \___  / _ \  / __(_/ ___   / _____ ___ __ __ ___ ___
- / // / // / / _ `/ _ \|/(_-<  / // / _ \/ // / / _// / / -_) _\ \/ -_/ __| |/ / -_/ __/
-/____/\_, /_/\_,_/_//_/ /___/ /____/_//_/____/ /_/ /_/_/\__/ /___/\__/_/  |___/\__/_/ 
-     /___/  '''
-
-intro = '''                          .".
-                         /  |
-                        /  /
-                       / ,"
-           .-------.--- /
-          "._ __.-/ o. o\  
-             "   (    Y  )
-                  )     /
-                 /     (
-                /       Y
-            .-"         |
-           /  _     \    \ 
-          /    `. ". ) /' )
-         Y       )( / /(,/
-        ,|      /     )
-       ( |     /     /
-        " \_  (__   (__ 
-            "-._,)--._,)'''
-
 
 # put print statements in a file
 class client(object):
@@ -137,7 +112,6 @@ class client(object):
 
 def __find_host():
     location = ''
-    print "{}\n{}\n".format(image, intro)
     while True:
         location = raw_input('\nConnecting from Pear Street? (y/n)\n')
         if location == 'y':  # computer ip
