@@ -1,5 +1,5 @@
 # FileTransfer
-Used to transfer files between a host and client, using the Python socekt library.
+Used to transfer files between a host and client, using the Python socket library.
 ## How To Use
 - __server.py__ should be executed within the server directory.
 - __client.py__ is executed to connect and talk to __server.py__.
