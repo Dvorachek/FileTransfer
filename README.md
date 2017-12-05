@@ -8,5 +8,5 @@ Used to transfer files between a host and client, using the Python socekt librar
 - After authentication is made, follow the instructions for transfering files between client and server.
 - Multiple clients may connect to a single server.
 - Once a client has tranfered a file it will terminate the connection.
-- If being used from different internet connects, port forwarding may be required on your router page.
+- If being used from different internet connections, port forwarding may be required on your router page.
 - Loading bar has been added.
