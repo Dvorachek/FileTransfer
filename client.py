@@ -110,22 +110,10 @@ class client(object):
             return "{}B".format(file_size)
 
 
-def __find_host():
-    location = ''
-    while True:
-        location = raw_input('\nConnecting from Pear Street? (y/n)\n')
-        if location == 'y':  # computer ip
-            return "192.168.0.47"
-        elif location == 'n':  # public ip
-            return "24.68.115.7"
-        else:
-            print 'try again'
-
-
 def main():
-    host = __find_host()
-    port = 8888
-    pw = 'water'
+    host = ""  # ENTER IP
+    port = 8000
+    pw = ""  # ENTER PASSWORD
 
     client(host, port, pw).connect()
 
