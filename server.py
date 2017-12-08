@@ -116,11 +116,10 @@ class server(object):
 
 
 def main():
-    host = "192.168.0.47"
-    # host = "172.16.7.14"
+    host = ""  # ENTER IP
     # host = socket.gethostname()
-    port = 8888
-    pw = 'water'
+    port = 8000
+    pw = ""  # ENTER PASSWORD
 
     server(host, port, pw).listening()
 
